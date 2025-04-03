@@ -44,7 +44,7 @@ class Purchase(Base):
     employee_id: Mapped[UUID] = mapped_column(Uuid())
     merch_item_id: Mapped[UUID] = mapped_column(Uuid())
     date: Mapped[datetime] = mapped_column(
-        DateTime(), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
 
     employee: Mapped["Employee"] = relationship("Employee", back_populates="purchases")

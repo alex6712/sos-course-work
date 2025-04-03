@@ -7,10 +7,10 @@ from sqlalchemy.orm import (
     mapped_column,
     relationship,
 )
-from sqlalchemy.types import String, Uuid
+from sqlalchemy.types import String, Uuid, Float
 
 from database.tables.base import Base
-from database.tables.junctions import Transaction
+from database.tables.junctions import Transfer
 
 if TYPE_CHECKING:  # данных блок необходим для избежания цикличного импорта
     from database.tables.entities import MerchItem
@@ -35,6 +35,7 @@ class Employee(Base):
     password: Mapped[str] = mapped_column(String(256))
     email: Mapped[str] = mapped_column(String(256), nullable=True)
     phone: Mapped[str] = mapped_column(String(256), nullable=True)
+    coins_amount: Mapped[float] = mapped_column(Float(), nullable=False)
     refresh_token: Mapped[str] = mapped_column(
         String(256), nullable=True, comment="Токен обновления токена доступа."
     )
@@ -49,33 +50,33 @@ class Employee(Base):
         viewonly=True,
     )
 
-    sent_transactions: Mapped[List["Transaction"]] = relationship(
-        "Transaction",
-        foreign_keys=[Transaction.sender_id],
+    sent_transfers: Mapped[List["Transfer"]] = relationship(
+        "Transfer",
+        foreign_keys=[Transfer.sender_id],
         back_populates="sender",
-        order_by=Transaction.date,
+        order_by=Transfer.date,
     )
 
-    gained_transactions: Mapped[List["Transaction"]] = relationship(
-        "Transaction",
-        foreign_keys=[Transaction.gainer_id],
+    gained_transfers: Mapped[List["Transfer"]] = relationship(
+        "Transfer",
+        foreign_keys=[Transfer.gainer_id],
         back_populates="gainer",
-        order_by=Transaction.date,
+        order_by=Transfer.date,
     )
 
     @property
-    def all_transactions(self) -> List["Transaction"]:
+    def all_transfers(self) -> List["Transfer"]:
         """Объединяет входящие и исходящие транзакции, сортируя их по времени
 
         Returns
         -------
-        transactions : List[Transaction]
+        transfers : List[Transfer]
             Объединённый список входящих и исходящих транзакций,
             отсортированный по времени совершения транзакции.
         """
         return sorted(
-            self.sent_transactions + self.gained_transactions,
-            key=lambda transaction: transaction.date,
+            self.sent_transfers + self.gained_transfers,
+            key=lambda transfer: transfer.date,
         )
 
     def __repr__(self) -> str:

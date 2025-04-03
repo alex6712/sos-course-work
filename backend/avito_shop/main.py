@@ -19,6 +19,10 @@ tags_metadata = [
         "name": "employees",
         "description": "Получение информации об **инвентаре** и **кошельке** пользователя.",
     },
+    {
+        "name": "transactions",
+        "description": "Выполнение операций **перевода** и **покупки**.",
+    },
 ]
 
 avito_shop = FastAPI(

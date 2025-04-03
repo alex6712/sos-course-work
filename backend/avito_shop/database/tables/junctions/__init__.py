@@ -1,2 +1,2 @@
 from .purchase import Purchase
-from .transaction import Transaction
+from .transfer import Transfer

@@ -1,4 +1,5 @@
 from typing import AnyStr
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,8 +8,26 @@ from database.tables.entities import Employee
 from schemas import EmployeeWithPasswordSchema
 
 
+async def get_employee_by_id(session: AsyncSession, id_: UUID) -> Employee:
+    """Возвращает модель сотрудника для дальнейшей обработки.
+
+    Parameters
+    ----------
+    session : AsyncSession
+        Объект сессии запроса.
+    id_ : UUID
+        UUID сотрудника.
+
+    Returns
+    -------
+    employee : Employee
+        Модель записи сотрудника из базы данных.
+    """
+    return await session.scalar(select(Employee).where(Employee.id == id_))
+
+
 async def get_employee_by_username(session: AsyncSession, username: AnyStr) -> Employee:
-    """Возвращает модель сотрудника для дальнейшей работы.
+    """Возвращает модель сотрудника для дальнейшей обработки.
 
     Parameters
     ----------

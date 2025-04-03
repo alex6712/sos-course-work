@@ -23,3 +23,4 @@ class EmployeeWithPasswordSchema(BaseModel):
     email: EmailStr = Field(default=None, examples=["someone@post.domen"])
     phone: PhoneNumber = Field(default=None, examples=["+7 900 000-00-00"])
     password: str = Field(examples=["password"])
+    coins_amount: float = Field(examples=[100.0])

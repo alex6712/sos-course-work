@@ -16,22 +16,22 @@ if TYPE_CHECKING:
     from database.tables.entities import Employee
 
 
-class Transaction(Base):
-    __tablename__ = "transaction"
+class Transfer(Base):
+    __tablename__ = "transfer"
 
     __table_args__ = (
-        PrimaryKeyConstraint("id", name="transaction_pkey"),
+        PrimaryKeyConstraint("id", name="transfer_pkey"),
         ForeignKeyConstraint(
             ["sender_id"],
             ["employee.id"],
-            name="transaction_sender_id_fk",
+            name="transfer_sender_id_fk",
             onupdate="CASCADE",
             ondelete="CASCADE",
         ),
         ForeignKeyConstraint(
             ["gainer_id"],
             ["employee.id"],
-            name="transaction_gainer_id_fk",
+            name="transfer_gainer_id_fk",
             onupdate="CASCADE",
             ondelete="CASCADE",
         ),
@@ -45,19 +45,19 @@ class Transaction(Base):
     gainer_id: Mapped[UUID] = mapped_column(Uuid())
     amount: Mapped[float] = mapped_column(Float(), nullable=False)
     date: Mapped[datetime] = mapped_column(
-        DateTime(), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
 
     sender: Mapped["Employee"] = relationship(
         "Employee",
         foreign_keys=[sender_id],
-        back_populates="sent_transactions",
+        back_populates="sent_transfers",
     )
 
     gainer: Mapped["Employee"] = relationship(
         "Employee",
         foreign_keys=[gainer_id],
-        back_populates="gained_transactions",
+        back_populates="gained_transfers",
     )
 
     def __repr__(self) -> str:

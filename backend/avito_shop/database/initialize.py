@@ -1,12 +1,30 @@
+from contextlib import asynccontextmanager
 from asyncpg.exceptions import ConnectionDoesNotExistError
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     create_async_engine,
+    AsyncSession,
 )
+from sqlalchemy import select
 
 from core.config import Settings, get_settings
 from database.tables.base import Base
+from database.tables.entities import MerchItem
+
+
+PRODUCTS = [
+    {"name": "t-shirt", "price": 80},
+    {"name": "cup", "price": 20},
+    {"name": "book", "price": 50},
+    {"name": "pen", "price": 10},
+    {"name": "powerbank", "price": 200},
+    {"name": "hoody", "price": 300},
+    {"name": "umbrella", "price": 200},
+    {"name": "socks", "price": 10},
+    {"name": "wallet", "price": 50},
+    {"name": "pink-hoody", "price": 500},
+]
 
 
 async def initialize():
@@ -34,7 +52,7 @@ async def initialize():
         "\n\033[91mWhile initializing database:"
         "\n\tFAIL:  {fail}"
         "\n\tCAUSE: {cause}"
-        "\nContinuing without initializing...\n"
+        "\nContinuing without initializing...\033[0m\n"
     )
 
     try:
@@ -43,6 +61,20 @@ async def initialize():
 
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+
+        async with AsyncSession(engine) as session:
+            existing_products = await session.execute(select(MerchItem.name))
+            existing_products = {row[0] for row in existing_products.all()}
+
+            new_products = [MerchItem(**product) for product in PRODUCTS if
+                            product["name"] not in existing_products]
+
+            if new_products:
+                session.add_all(new_products)
+                await session.commit()
+                print("\033[94mProducts added successfully.\033[0m")
+            else:
+                print("\033[93mNo new products to add.\033[0m")
     except ConnectionDoesNotExistError:
         print(
             error.format(
@@ -58,4 +90,4 @@ async def initialize():
             )
         )
     else:
-        print("\n\033[92mDatabase initialized successfully.\n")
+        print("\n\033[92mDatabase initialized and products added successfully.\033[0m\n")
