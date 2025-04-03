@@ -6,7 +6,9 @@ from database.tables.entities import Employee
 from database.tables.junctions import Purchase, Transfer
 
 
-async def register_purchase(session: AsyncSession, employee_id: UUID, merch_item_id: UUID):
+async def register_purchase(
+    session: AsyncSession, employee_id: UUID, merch_item_id: UUID
+):
     """Добавляет в базу данных запись о покупке.
 
     Parameters

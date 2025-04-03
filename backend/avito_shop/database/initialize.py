@@ -1,4 +1,3 @@
-from contextlib import asynccontextmanager
 from asyncpg.exceptions import ConnectionDoesNotExistError
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.asyncio import (
@@ -11,7 +10,6 @@ from sqlalchemy import select
 from core.config import Settings, get_settings
 from database.tables.base import Base
 from database.tables.entities import MerchItem
-
 
 PRODUCTS = [
     {"name": "t-shirt", "price": 80},
@@ -66,8 +64,11 @@ async def initialize():
             existing_products = await session.execute(select(MerchItem.name))
             existing_products = {row[0] for row in existing_products.all()}
 
-            new_products = [MerchItem(**product) for product in PRODUCTS if
-                            product["name"] not in existing_products]
+            new_products = [
+                MerchItem(**product)
+                for product in PRODUCTS
+                if product["name"] not in existing_products
+            ]
 
             if new_products:
                 session.add_all(new_products)
@@ -90,4 +91,6 @@ async def initialize():
             )
         )
     else:
-        print("\n\033[92mDatabase initialized and products added successfully.\033[0m\n")
+        print(
+            "\n\033[92mDatabase initialized and products added successfully.\033[0m\n"
+        )

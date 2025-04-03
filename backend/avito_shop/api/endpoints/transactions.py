@@ -64,7 +64,9 @@ async def send_coins(
             detail="Невозможно выполнить перевод, т.к. на счёте недостаточно средств.",
         )
 
-    gainer: Employee = await employee_service.get_employee_by_id(session, request_body.gainer_id)
+    gainer: Employee = await employee_service.get_employee_by_id(
+        session, request_body.gainer_id
+    )
 
     if not gainer:
         raise HTTPException(
@@ -75,11 +77,13 @@ async def send_coins(
     if sender.id == gainer.id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Отправитель и получатель не могут совпадать",
+            detail="Отправитель и получатель не могут совпадать.",
         )
 
     try:
-        await transaction_service.spend_coins(session, sender, request_body.coins_amount)
+        await transaction_service.spend_coins(
+            session, sender, request_body.coins_amount
+        )
 
         await transaction_service.gain_coins(session, gainer, request_body.coins_amount)
 
@@ -127,7 +131,9 @@ async def buy(
     response : StandardResponse
         Отчёт о выполнении покупки.
     """
-    merch_item: MerchItem = await merch_item_service.get_merch_item_by_id(session, merch_item_id)
+    merch_item: MerchItem = await merch_item_service.get_merch_item_by_id(
+        session, merch_item_id
+    )
 
     print(merch_item)
 
