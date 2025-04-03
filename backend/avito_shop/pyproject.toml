@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "avito-shop"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["alex6712 <alexeivanyukov@yandex.ru>"]
 readme = "README.md"
@@ -9,6 +9,12 @@ readme = "README.md"
 python = "^3.12"
 fastapi = {extras = ["standard"], version = "^0.115.12"}
 pydantic-settings = "^2.8.1"
+sqlalchemy = "^2.0.40"
+asyncpg = "^0.30.0"
+python-jose = "^3.4.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+pydantic-extra-types = "^2.10.3"
+phonenumbers = "^9.0.2"
 
 
 [tool.poetry.group.dev.dependencies]

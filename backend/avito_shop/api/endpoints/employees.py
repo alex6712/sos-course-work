@@ -1,8 +1,13 @@
-from fastapi import APIRouter, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+
+from api.dependencies import validate_access_token
+from database.tables.entities import Employee
 
 router = APIRouter(
-    prefix="/user_info",
-    tags=["user_info"],
+    prefix="/employees",
+    tags=["employees"],
 )
 
 
@@ -10,8 +15,8 @@ router = APIRouter(
     "/inventory",
     summary="Предоставляет информацию об инвентаре пользователя.",
 )
-async def inventory():
-    return {"code": 200, "message": "Всё ок!"}
+async def inventory(employee: Annotated[Employee, Depends(validate_access_token)]):
+    return {"code": 200, "message": employee.id}
 
 
 @router.get(
