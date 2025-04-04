@@ -13,8 +13,11 @@ class WalletResponse(StandardResponse):
 
     Attributes
     ----------
+    coins_amount : float
+        Количество монет на аккаунте сотрудника.
     transfers : List[TransferSchema]
         Список всех переводов сотрудника.
     """
 
+    coins_amount: float = Field(examples=[1000.0])
     transfers: List[TransferSchema] = Field()

@@ -109,7 +109,11 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_LIFETIME_MINUTES: int
     REFRESH_TOKEN_LIFETIME_DAYS: int
 
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+    )
 
 
 @lru_cache

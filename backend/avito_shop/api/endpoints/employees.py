@@ -61,4 +61,7 @@ async def wallet(
     response : InventoryResponse
         Список всех переводов сотрудника.
     """
-    return {"transfers": await employee.awaitable_attrs.all_transfers}
+    return {
+        "coins_amount": employee.coins_amount,
+        "transfers": await employee.awaitable_attrs.all_transfers,
+    }

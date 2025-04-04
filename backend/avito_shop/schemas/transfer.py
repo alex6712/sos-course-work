@@ -14,6 +14,8 @@ class TransferSchema(BaseModel):
         UUID сотрудника-отправителя.
     gainer_id : UUID
         UUID сотрудника-получателя.
+    amount : float
+        Сумма перевода.
     date : AwareDatetime
         Дата перевода.
     """
@@ -21,4 +23,5 @@ class TransferSchema(BaseModel):
     id: UUID = Field(examples=["7e4a71df-6f79-4ad7-a102-ec7714f9ddb8"])
     sender_id: UUID = Field(examples=["7e4a71df-6f79-4ad7-a102-ec7714f9ddb8"])
     gainer_id: UUID = Field(examples=["7e4a71df-6f79-4ad7-a102-ec7714f9ddb8"])
+    amount: float = Field(examples=[100.0])
     date: AwareDatetime = Field(examples=["2025-04-03 20:25:41.972274+03"])

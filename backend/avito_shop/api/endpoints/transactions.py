@@ -98,7 +98,7 @@ async def send_coins(
             detail=f"Неизвестная ошибка: {e}.",
         )
 
-    return {"code": 200, "message": "Монеты успешно отправлены."}
+    return {"message": "Монеты успешно отправлены."}
 
 
 @router.get(
@@ -135,8 +135,6 @@ async def buy(
         session, merch_item_id
     )
 
-    print(merch_item)
-
     if not merch_item:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -161,4 +159,4 @@ async def buy(
             detail=f"Неизвестная ошибка: {e}.",
         )
 
-    return {"code": 200, "message": "Покупка совершена успешно."}
+    return {"message": "Покупка совершена успешно."}
