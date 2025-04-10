@@ -11,7 +11,7 @@ from api.services import employee_service
 from core.jwt import create_jwt_pair
 from core.security import hash_, verify
 from database.tables.entities import Employee
-from schemas import EmployeeWithPasswordSchema
+from schemas.requests import SignUpRequest
 from schemas.responses import StandardResponse, TokenResponse
 
 router = APIRouter(
@@ -75,7 +75,7 @@ async def sign_in(
     summary="Регистрация.",
 )
 async def sign_up(
-    employee: Annotated[EmployeeWithPasswordSchema, Body()],
+    employee: Annotated[SignUpRequest, Body()],
     session: Annotated[AsyncSession, Depends(get_session)],
 ):
     """Метод регистрации.
@@ -84,7 +84,7 @@ async def sign_up(
 
     Parameters
     ----------
-    employee : EmployeeWithPasswordSchema
+    employee : SignUpRequest
         Схема объекта сотрудника.
     session : AsyncSession
         Объект сессии запроса.
@@ -101,7 +101,16 @@ async def sign_up(
     except IntegrityError as integrity_error:
         await session.rollback()
 
-        if result := re.search(r'"\((.*)\)=\((.*)\)"', str(integrity_error.orig)):
+        # Необходимо для тестов, т.к. текст ошибки SQLite отличается от PostgreSQL
+        if "sqlite3" in str(integrity_error):
+            column, *_ = re.search(r'\.(.*)', str(integrity_error.orig)).groups()
+            value: str = employee.model_dump()[column]
+
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f'Employee with {column}="{value}" already exists!',
+            )
+        elif result := re.search(r'"\((.*)\)=\((.*)\)"', str(integrity_error.orig)):
             column, value = result.groups()
 
             raise HTTPException(

@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr, Field
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
 
-class EmployeeWithPasswordSchema(BaseModel):
+class SignUpRequest(BaseModel):
     """Схема объекта сотрудника с паролем.
 
     Используется в качестве представления информации о сотруднике, включая его пароль.
@@ -23,4 +23,3 @@ class EmployeeWithPasswordSchema(BaseModel):
     email: EmailStr = Field(default=None, examples=["someone@post.domen"])
     phone: PhoneNumber = Field(default=None, examples=["+7 900 000-00-00"])
     password: str = Field(examples=["password"])
-    coins_amount: float = Field(examples=[100.0])

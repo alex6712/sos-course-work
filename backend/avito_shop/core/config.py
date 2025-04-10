@@ -56,6 +56,8 @@ class Settings(BaseSettings):
         Database name.
     DATABASE_URL : PostgresDsn
         Connection string (link) to the database.
+    TEST_DATABASE_URL: str
+        Строка подключения к тестовой базе данных.
     JWT_SECRET_KEY : str
         The secret key to encode the JSON Web Token.
     JWT_ALGORITHM : str
@@ -103,6 +105,7 @@ class Settings(BaseSettings):
     DATABASE_NAME: str
 
     DATABASE_URL: str
+    TEST_DATABASE_URL: str
 
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str

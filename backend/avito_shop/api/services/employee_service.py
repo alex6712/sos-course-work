@@ -1,29 +1,10 @@
 from typing import AnyStr
-from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.tables.entities import Employee
-from schemas import EmployeeWithPasswordSchema
-
-
-async def get_employee_by_id(session: AsyncSession, id_: UUID) -> Employee:
-    """Возвращает модель сотрудника для дальнейшей обработки.
-
-    Parameters
-    ----------
-    session : AsyncSession
-        Объект сессии запроса.
-    id_ : UUID
-        UUID сотрудника.
-
-    Returns
-    -------
-    employee : Employee
-        Модель записи сотрудника из базы данных.
-    """
-    return await session.scalar(select(Employee).where(Employee.id == id_))
+from schemas.requests import SignUpRequest
 
 
 async def get_employee_by_username(session: AsyncSession, username: AnyStr) -> Employee:
@@ -68,16 +49,14 @@ async def update_refresh_token(
     await session.commit()
 
 
-async def add_employee(
-    session: AsyncSession, employee_info: EmployeeWithPasswordSchema
-):
+async def add_employee(session: AsyncSession, employee_info: SignUpRequest):
     """Добавляет в базу данных новую запись о сотруднике.
 
     Parameters
     ----------
     session : AsyncSession
         Объект сессии запроса.
-    employee_info : EmployeeWithPasswordSchema
+    employee_info : SignUpRequest
         Схема объекта сотрудника с паролем.
     """
     session.add(Employee(**employee_info.model_dump()))

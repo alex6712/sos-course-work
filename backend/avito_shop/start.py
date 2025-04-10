@@ -11,7 +11,9 @@ if __name__ == "__main__":
     if settings.INITIALIZE_DB:
         asyncio.run(initialize())
 
-    print(f"Swagger UI URL: \033[97mhttp://{settings.DOMAIN}:{settings.BACKEND_PORT}/docs\033[0m")
+    print(
+        f"Swagger UI URL: \033[97mhttp://{settings.DOMAIN}:{settings.BACKEND_PORT}/docs\033[0m"
+    )
 
     uvicorn.run(
         app="main:avito_shop",

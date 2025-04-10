@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from sqlalchemy import PrimaryKeyConstraint, UniqueConstraint, func
+from sqlalchemy import PrimaryKeyConstraint, UniqueConstraint
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,
@@ -35,7 +35,7 @@ class Employee(Base):
     password: Mapped[str] = mapped_column(String(256))
     email: Mapped[str] = mapped_column(String(256), nullable=True)
     phone: Mapped[str] = mapped_column(String(256), nullable=True)
-    coins_amount: Mapped[float] = mapped_column(Float(), nullable=False)
+    coins_amount: Mapped[float] = mapped_column(Float(), nullable=False, default=1000.0)
     refresh_token: Mapped[str] = mapped_column(
         String(256), nullable=True, comment="Токен обновления токена доступа."
     )

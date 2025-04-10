@@ -64,14 +64,14 @@ async def send_coins(
             detail="Невозможно выполнить перевод, т.к. на счёте недостаточно средств.",
         )
 
-    gainer: Employee = await employee_service.get_employee_by_id(
-        session, request_body.gainer_id
+    gainer: Employee = await employee_service.get_employee_by_username(
+        session, request_body.gainer_username
     )
 
     if not gainer:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Сотрудник с таким UUID не найден.",
+            detail="Сотрудник с таким username не найден.",
         )
 
     if sender.id == gainer.id:

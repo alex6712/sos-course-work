@@ -1,11 +1,11 @@
 from asyncpg.exceptions import ConnectionDoesNotExistError
 from sqlalchemy import select
 from sqlalchemy.exc import ProgrammingError
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.config import Settings, get_settings
 from database.tables.base import Base
 from database.tables.entities import MerchItem
+from tests.override import test_engine
 
 PRODUCTS = [
     {"name": "t-shirt", "price": 80},
@@ -21,27 +21,14 @@ PRODUCTS = [
 ]
 
 
-async def initialize():
-    """Инициализация базы данных.
+async def override_initialize():
+    """Инициализирует тестовую базу данных.
 
-    Сбрасывает все таблицы, а затем воссоздает.
-    Это удалит всю информацию из существующих таблиц, поэтому
-    это очень небезопасная операция.
+    Инициализирует тестовую in-memory SQLite базу данных для изоляции
+    тестов.
 
-    Вот почему эта функция требует подтверждения суперпользователя.
+    Эта функция не требует подтверждения суперпользователя.
     """
-    settings: Settings = get_settings()
-
-    database_user: str = input("Please, enter the superuser login: ")
-    database_password: str = input("Please, enter the superuser password: ")
-
-    engine: AsyncEngine = create_async_engine(
-        url=f"postgresql+asyncpg://{database_user}:{database_password}@{settings.DOMAIN}"
-        f":{settings.DATABASE_PORT}/{settings.DATABASE_NAME}",
-        echo=False,
-        pool_pre_ping=True,
-    )
-
     error = (
         "\n\033[91mWhile initializing database:"
         "\n\tFAIL:  {fail}"
@@ -50,13 +37,13 @@ async def initialize():
     )
 
     try:
-        async with engine.begin() as conn:
+        async with test_engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
 
-        async with engine.begin() as conn:
+        async with test_engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 
-        async with AsyncSession(engine) as session:
+        async with AsyncSession(test_engine) as session:
             existing_products = await session.execute(select(MerchItem.name))
             existing_products = {row[0] for row in existing_products.all()}
 
@@ -69,9 +56,6 @@ async def initialize():
             if new_products:
                 session.add_all(new_products)
                 await session.commit()
-                print("\033[94mProducts added successfully.\033[0m")
-            else:
-                print("\033[93mNo new products to add.\033[0m")
     except ConnectionDoesNotExistError:
         print(
             error.format(
@@ -85,8 +69,4 @@ async def initialize():
                 fail="Unable to establish a connection.",
                 cause="User is not the superuser.",
             )
-        )
-    else:
-        print(
-            "\n\033[92mDatabase initialized and products added successfully.\033[0m\n"
         )
