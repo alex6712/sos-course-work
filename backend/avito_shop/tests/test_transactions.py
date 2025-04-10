@@ -40,7 +40,7 @@ async def test_send_coins_success(async_client):
         json={
             "gainer_username": gainer_username,
             "coins_amount": 100.0,
-        }
+        },
     )
 
     assert response.status_code == 200
@@ -86,11 +86,14 @@ async def test_send_coins_negative(async_client):
         json={
             "gainer_username": gainer_username,
             "coins_amount": -1.0,
-        }
+        },
     )
 
     assert response.status_code == 400
-    assert response.json()["detail"] == "Количество монет не может быть отрицательным или равным нулю."
+    assert (
+        response.json()["detail"]
+        == "Количество монет не может быть отрицательным или равным нулю."
+    )
 
 
 @pytest.mark.asyncio
@@ -132,12 +135,14 @@ async def test_send_coins_not_enough(async_client):
         json={
             "gainer_username": gainer_username,
             "coins_amount": 1_000_000.0,
-        }
+        },
     )
 
     assert response.status_code == 400
-    assert response.json()[
-               "detail"] == "Невозможно выполнить перевод, т.к. на счёте недостаточно средств."
+    assert (
+        response.json()["detail"]
+        == "Невозможно выполнить перевод, т.к. на счёте недостаточно средств."
+    )
 
 
 @pytest.mark.asyncio
@@ -169,7 +174,7 @@ async def test_send_coins_to_me(async_client):
         json={
             "gainer_username": gainer_username,
             "coins_amount": 10.0,
-        }
+        },
     )
 
     assert response.status_code == 400

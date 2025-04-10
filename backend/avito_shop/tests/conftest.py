@@ -16,7 +16,7 @@ async def async_client():
     avito_shop.dependency_overrides[get_session] = override_get_session
 
     async with AsyncClient(
-            transport=ASGITransport(app=avito_shop),
-            base_url=f"http://{settings.DOMAIN}:{settings.BACKEND_PORT}/{settings.CURRENT_API_URL}",
+        transport=ASGITransport(app=avito_shop),
+        base_url=f"http://{settings.DOMAIN}:{settings.BACKEND_PORT}/{settings.CURRENT_API_URL}",
     ) as client:
         yield client

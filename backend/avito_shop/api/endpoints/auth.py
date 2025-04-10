@@ -103,7 +103,7 @@ async def sign_up(
 
         # Необходимо для тестов, т.к. текст ошибки SQLite отличается от PostgreSQL
         if "sqlite3" in str(integrity_error):
-            column, *_ = re.search(r'\.(.*)', str(integrity_error.orig)).groups()
+            column, *_ = re.search(r"\.(.*)", str(integrity_error.orig)).groups()
             value: str = employee.model_dump()[column]
 
             raise HTTPException(
