@@ -86,3 +86,7 @@ async def initialize():
         print(
             "\n\033[92mDatabase initialized and products added successfully.\033[0m\n"
         )
+
+
+if __name__ == "__main__":
+    initialize()
