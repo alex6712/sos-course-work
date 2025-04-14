@@ -6,10 +6,10 @@
         Сервис покупки мерча сотрудниками Авито
     </h3>
     <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/alex6712/sos-course-work?logo=GitHub">
+    <img alt="Tests Passed" src="https://github.com/alex6712/sos-course-work/actions/workflows/backend-tests.yml/badge.svg">
     <a href="https://github.com/psf/black">
         <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
     </a>
-    <img alt="Tests Passed" src="https://github.com/alex6712/sos-course-work/actions/workflows/backend-tests.yml/badge.svg">
 </div>
 
 Курсовая работа по предмету Сервис-ориентированные системы студента Ванюкова Алексея Игоревича, ИРИТ, НГТУ, 21-ИС.
