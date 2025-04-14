@@ -51,14 +51,8 @@ async def sign_in(
         session, form_data.username
     )
 
-    if not employee:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    if not verify(form_data.password, employee.password):
+    # проверка на существование пользователя и соответствие пароля
+    if not (employee and verify(form_data.password, employee.password)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password.",
