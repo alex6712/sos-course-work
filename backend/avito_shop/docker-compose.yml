@@ -1,0 +1,30 @@
+version: '3.12'
+
+services:
+  avito_shop_app:
+    build: .
+    container_name: avito_shop_service
+    env_file: .env
+    environment:
+      - BACKEND_PORT=${BACKEND_PORT}
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    depends_on:
+      - avito_shop_db
+
+  avito_shop_db:
+    image: postgres:17
+    container_name: avito_shop_database
+    env_file: .env
+    environment:
+      - DATABASE_PORT=${DATABASE_PORT}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

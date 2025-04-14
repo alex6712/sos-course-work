@@ -32,12 +32,8 @@ async def initialize():
     """
     settings: Settings = get_settings()
 
-    database_user: str = input("Please, enter the superuser login: ")
-    database_password: str = input("Please, enter the superuser password: ")
-
     engine: AsyncEngine = create_async_engine(
-        url=f"postgresql+asyncpg://{database_user}:{database_password}@{settings.DOMAIN}"
-        f":{settings.DATABASE_PORT}/{settings.DATABASE_NAME}",
+        url=settings.DATABASE_URL,
         echo=False,
         pool_pre_ping=True,
     )
