@@ -44,7 +44,7 @@ def jwt_decode(token: AnyStr) -> Dict:
     )
 
 
-def create_jwt(data: Dict, expires_delta: timedelta) -> AnyStr:
+def _create_jwt(data: Dict, expires_delta: timedelta) -> AnyStr:
     """Создает JWT.
 
     В качестве ввода он получает информацию для кодирования и время жизни токена.
@@ -97,6 +97,6 @@ def create_jwt_pair(
         refresh_token_data = access_token_data
 
     return {
-        "access_token": create_jwt(access_token_data, at_expires_delta),
-        "refresh_token": create_jwt(refresh_token_data, rt_expires_delta),
+        "access_token": _create_jwt(access_token_data, at_expires_delta),
+        "refresh_token": _create_jwt(refresh_token_data, rt_expires_delta),
     }
